@@ -95,11 +95,14 @@ IMAGE_NAME="Arch-Linux-aarch64-cloudimg-$(date '+%Y%m%d').${BUILD_SUFFIX}.img"
 IMAGE_FILE="$IMAGE_NAME.xz"
 QCOW2_IMG_FILE="${IMAGE_NAME%.img}.qcow2.xz"
 VMDK_IMG_FILE="${IMAGE_NAME%.img}.vmdk.xz"
+WORKDIR=/tmp/lima/output
 
-[[ -f /tmp/lima/output/"$IMAGE_NAME" ]] && rm -f /tmp/lima/output/"$IMAGE_NAME"
-[[ -f /tmp/lima/output/"$IMAGE_FILE" ]] && rm -f /tmp/lima/output/"$IMAGE_FILE"
-[[ -f /tmp/lima/output/"$QCOW2_IMG_FILE" ]] && rm -f /tmp/lima/output/"$QCOW2_IMG_FILE"
-[[ -f /tmp/lima/output/"$VMDK_IMG_FILE" ]] && rm -f /tmp/lima/output/"$VMDK_IMG_FILE"
+mkdir -p "$WORKDIR"
+
+[[ -f "$WORKDIR/$IMAGE_NAME" ]] && rm -f "$WORKDIR/$IMAGE_NAME"
+[[ -f "$WORKDIR/$IMAGE_FILE" ]] && rm -f "$WORKDIR/$IMAGE_FILE"
+[[ -f "$WORKDIR/$QCOW2_IMG_FILE" ]] && rm -f "$WORKDIR/$QCOW2_IMG_FILE"
+[[ -f "$WORKDIR/$VMDK_IMG_FILE" ]] && rm -f "$WORKDIR/$VMDK_IMG_FILE"
 
 # check if build VM exists and running
 Build_VM=$(limactl list 2>/dev/null)
@@ -107,9 +110,9 @@ VM_STATE=$(echo "$Build_VM" | awk -v vm="$VM_NAME" '$1 == vm {print $2}')
 if [ -z "$VM_STATE" ]; then
     printf " %s Creating $VM_NAME VM...%s\n" "$TEXT_GREEN" "$FORMAT_RESET"
     if [ "$debian_sid" == "true" ]; then
-        limactl start --yes --containerd none --cpus 12 --memory 16 --disk 10 --name "$VM_NAME" template://experimental/debian-sid
+        limactl start --yes --containerd none --cpus 12 --memory 16 --disk 10 --name "$VM_NAME" template://experimental/debian-sid --mount "$WORKDIR":w
     else
-        limactl start --yes --containerd none --cpus 12 --memory 16 --disk 10 --name "$VM_NAME" template://ubuntu
+        limactl start --yes --containerd none --cpus 12 --memory 16 --disk 10 --name "$VM_NAME" template://ubuntu --mount "$WORKDIR":w
     fi
 elif [ "$VM_STATE" = "Running" ]; then
     printf "%s %s VM is already running%s\n" "$TEXT_GREEN" "$VM_NAME" "$FORMAT_RESET"

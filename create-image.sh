@@ -217,7 +217,7 @@ PARTUUID_BOOT=$(blkid -s PARTUUID -o value /dev/disk/by-partlabel/BOOT)
 printf '%s Setting up /etc/fstab ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 cat <<FSTAB >>/etc/fstab
 PARTUUID=$PARTUUID_ROOT  /       ext4    defaults,noatime    0 1
-PARTUUID=$PARTUUID_BOOT  /boot   vfat    defaults            0 2
+PARTUUID=$PARTUUID_BOOT  /boot   vfat    defaults,nodev,nosuid,noexec,fmask=0177,dmask=0077    0 2
 FSTAB
 
 printf '%s Setting up pacman ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"

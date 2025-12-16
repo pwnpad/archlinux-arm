@@ -242,9 +242,6 @@ options root=PARTUUID=$PARTUUID_ROOT rw console=ttyAMA0 rootwait
 initrd  /initramfs-linux.img
 EOF
 
-printf '%s Installing cloud-guest-utils ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
-pacman -Sy cloud-guest-utils --needed --noconfirm
-
 printf '%s Installing cloud-guest-utils & cloud-init ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 pacman -Sy cloud-guest-utils cloud-init --needed --noconfirm
 

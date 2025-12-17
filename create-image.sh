@@ -242,6 +242,20 @@ options root=PARTUUID=$PARTUUID_ROOT rw console=ttyAMA0 rootwait
 initrd  /initramfs-linux.img
 EOF
 
+printf '%s Creating pacman hook to update systemd-boot ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
+mkdir -p /etc/pacman.d/hooks
+cat <<EOF >/etc/pacman.d/hooks/95-systemd-boot.hook
+[Trigger]
+Type = Package
+Operation = Upgrade
+Target = systemd
+
+[Action]
+Description = Gracefully upgrading systemd-boot...
+When = PostTransaction
+Exec = /usr/bin/systemctl restart systemd-boot-update.service
+EOF
+
 printf '%s Installing cloud-guest-utils, cloud-init, OpenSSH ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 pacman -Sy cloud-guest-utils cloud-init openssh --needed --noconfirm
 

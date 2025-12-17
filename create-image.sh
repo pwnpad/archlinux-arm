@@ -242,8 +242,8 @@ options root=PARTUUID=$PARTUUID_ROOT rw console=ttyAMA0 rootwait
 initrd  /initramfs-linux.img
 EOF
 
-printf '%s Installing cloud-guest-utils & cloud-init ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
-pacman -Sy cloud-guest-utils cloud-init --needed --noconfirm
+printf '%s Installing cloud-guest-utils, cloud-init, OpenSSH ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
+pacman -Sy cloud-guest-utils cloud-init openssh --needed --noconfirm
 
 printf '%s Enabling cloud-init services ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 systemctl enable cloud-init-main.service
@@ -263,9 +263,6 @@ EOF
 printf '%s Enabling systemd-networkd and systemd-resolved services ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
-
-printf '%s Installing OpenSSH ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
-pacman -Sy openssh --needed --noconfirm
 
 printf '%s Enabling OpenSSH Daemon ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 systemctl enable sshd.service

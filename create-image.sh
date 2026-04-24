@@ -186,11 +186,6 @@ sudo pacman-key --populate
 
 sudo pacstrap /mnt/arch-root base linux-aarch64 archlinuxarm-keyring
 
-# alarm's linux-aarch64 kernel workaround
-if [ -f /mnt/arch-root/boot/Image ]; then
-    sudo mv /mnt/arch-root/boot/Image /mnt/arch-root/boot/vmlinuz-linux
-fi
-
 printf "%s Setting up Arch environment ...%s\n" "$TEXT_GREEN" "$FORMAT_RESET"
 sudo arch-chroot /mnt/arch-root /bin/bash <<'CHROOT'
 # --- Color output ---
@@ -237,7 +232,7 @@ EOF
 printf '%s Creating entry for Arch Linux ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 cat <<EOF >/boot/loader/entries/arch.conf
 title   Arch Linux ARM
-efi     /vmlinuz-linux
+linux   /Image
 options root=PARTUUID=$PARTUUID_ROOT rw console=ttyAMA0 rootwait
 initrd  /initramfs-linux.img
 EOF

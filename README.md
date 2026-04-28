@@ -77,6 +77,7 @@ This will launch a VM using your custom Arch Linux ARM image.
 
 - The build process requires root privileges inside the build VM for disk and package operations.
 - The image includes cloud-init, OpenSSH, and is pre-configured for DHCP networking.
+- The image configures `/etc/resolv.conf` to use `systemd-resolved`'s stub resolver.
 - For troubleshooting, check the console output of each script for error messages.
 
 ## License

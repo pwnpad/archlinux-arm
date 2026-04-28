@@ -280,6 +280,9 @@ printf '%s Clearing package cache ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 printf "y\ny\n" | pacman -Scc
 CHROOT
 
+printf '%s Linking image /etc/resolv.conf to systemd-resolved stub resolver ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
+sudo ln -sf /run/systemd/resolve/stub-resolv.conf /mnt/arch-root/etc/resolv.conf
+
 # --- Zero out free space in root partition to improve compressibility ---
 printf '%s Zeroing out free space in root partition ...%s\n' "$TEXT_GREEN" "$FORMAT_RESET"
 sudo dd if=/dev/zero of=/mnt/arch-root/zero.fill bs=1M status=progress || true
